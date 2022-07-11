@@ -1,7 +1,7 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-##Hosted app link- https://cheerful-pudding-a82cb3.netlify.app/
+## Hosted app link- https://cheerful-pudding-a82cb3.netlify.app/
 ## Available Scripts
 
 In the project directory, you can run:
