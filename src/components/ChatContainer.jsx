@@ -17,8 +17,22 @@ function ChatContainer({ currentChat, currentUser, socket }) {
                     from:currentUser._id,
                     to:currentChat._id,
                 });
-    
-                setMessages(response.data);
+                const temp=[];
+                response.data.forEach((res)=>{
+                    const fromSelf=res.fromSelf;
+                    const message=res.message;
+                    let time=String(new Date(res.time));
+                    const arr=time.split(' ');
+                    time=arr[4].slice(0, 5);
+                    const obj={
+                        fromSelf:fromSelf,
+                        message:message,
+                        time: time
+                    }
+                    temp.push(obj);
+                })
+                // console.log(String(new Date(response.data[0].time)));
+                setMessages(temp);
 
             }
         }
@@ -36,6 +50,7 @@ function ChatContainer({ currentChat, currentUser, socket }) {
             from:currentUser._id,
             message:msg
         });
+        var today= new Date().toLocaleTimeString().slice(0, 5);
         
         const msgs=[...messages];
         msgs.push({fromSelf:true, message:msg});
@@ -44,6 +59,7 @@ function ChatContainer({ currentChat, currentUser, socket }) {
     useEffect(()=>{
         if(socket.current){
             socket.current.on("msg-recieve", (msg)=>{
+                var today= new Date().toLocaleTimeString().slice(0, 5);
                 setArrivalMessage({fromSelf:false, message:msg})
             })
         }
@@ -80,7 +96,7 @@ function ChatContainer({ currentChat, currentUser, socket }) {
                                         <div ref={scrollRef} key={uuidv4()}>
                                            <div className={`message ${message.fromSelf?"sended":"received"}`}>
                                                 <div className="content">
-                                                    <p>{message.message}</p>
+                                                    <p>{message.message} <span className='time'>{message.time}</span></p>
                                                 </div>
                                            </div> 
                                         </div>
@@ -150,9 +166,13 @@ const Container = styled.div`
         color: #d1d1d1;
         @media screen and (min-width: 720px) and (max-width: 1080px) {
           max-width: 70%;
+          
         }
       }
     }
+    .time{
+            font-size:0.7rem;
+          }
     .sended {
       justify-content: flex-end;
       .content {
